@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Survey
+{% endblock %}
+
+{% block main %}
+<div class="bg">
+    <div class="header">
+        <h1 class ="survey center1">Survey! </h1>
+        <h1 class ="survey center1"> Get Matched with a Musical! </h1>
+        <h2 class="survey center1">Don't know what musical to try first or looking for something to watch? Take this survey and find out!</h2>
+        <p class="survey center1">For each question, simply choose the answer choice that speaks to you the most. When you're done, be sure to hit submit!</p>
+    </div>
+    <div class="container">
+        <form class="text-left was-validated" action="/survey" method="post" >
+            {% for question in questions %}
+                <div class="form-group card mb-3 px-auto py-auto shrinkcard center ">
+                    <p class="qn">{{ question['question'] }}</p>
+
+                    {% for i in range(5) %}
+                        {% set answer_number = i+1 %}
+                        {% set label = '%s%s'| format("{{ question['question'] }} - answer", answer_number) %}
+                        {% set answer_key = 'answer%d' | format(answer_number) %}
+
+                        <div class="form-check">
+                            <input class="form-check-input blue" type="radio" name="{{ question['type'] }}" id="{{ label }}" value="{{ answer_number }}" required>
+                            <label class="form-check-label" for="{{ label }}">
+                                <div class="blue">{{ question[answer_key] }}</div>
+                            </label>
+                            {% if answer_number == 5 %}
+                                <div class="invalid-feedback blue">
+                                    Please select an option
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button class="btn btn-primary center" type="submit" name="survey_page_action" value="submit_survey">Submit survey!</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
